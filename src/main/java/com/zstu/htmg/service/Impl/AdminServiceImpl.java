@@ -4,9 +4,7 @@ import com.zstu.htmg.dto.AdminUserDetails;
 import com.zstu.htmg.mapper.RoleMapper;
 import com.zstu.htmg.mapper.UserMapper;
 import com.zstu.htmg.pojo.Role;
-import com.zstu.htmg.pojo.RoleExample;
 import com.zstu.htmg.pojo.User;
-import com.zstu.htmg.pojo.UserExample;
 import com.zstu.htmg.service.AdminService;
 import com.zstu.htmg.util.JwtTokenUtil;
 import org.springframework.beans.BeanUtils;
@@ -39,9 +37,11 @@ public class AdminServiceImpl implements AdminService {
 //        User user = userMapper.selectByPrimaryKey(username);
         User user;
 //        example = userMapper.selectByPrimaryKey(username);
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andUsernameEqualTo(username);
-        user = userMapper.selectByExample(userExample).get(0);
+        List<User> tempUserList = userMapper.selectByUsername(username);
+        if (tempUserList.size()!=1){
+            throw new Exception("账户或密码不正确");
+        }
+        user = tempUserList.get(0);
         if(user == null){
             throw new BadCredentialsException("账户或密码不正确");
         }
@@ -49,9 +49,7 @@ public class AdminServiceImpl implements AdminService {
             System.out.println("your password"+password+" correct:"+ user.getPassword());
             throw new BadCredentialsException("密码不正确");
         }
-        RoleExample roleExample=new RoleExample();
-        roleExample.createCriteria().andUseridEqualTo(user.getUsername());
-        List<Role> roles=roleMapper.selectByExample(roleExample);
+        List<Role> roles=roleMapper.selectByUsername(username);
         userDetails = new AdminUserDetails(user,roles);
 //            userDetails = new AdminUserDetails(user,null);
         //   UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -80,10 +78,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public User getAdminByUsername(String username)  throws Exception{
         User example;
-//        example = userMapper.selectByPrimaryKey(username);
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andUsernameEqualTo(username);
-        example = userMapper.selectByExample(userExample).get(0);
+        List<User> tempUserList = userMapper.selectByUsername(username);
+        if (tempUserList.size()!=1){
+            throw new Exception("duplicated username or username not exist");
+        }
+        example = tempUserList.get(0);
         return example;
     }
 
@@ -98,14 +97,15 @@ public class AdminServiceImpl implements AdminService {
         //将密码进行加密操作
         String encodePassword = passwordEncoder.encode(umsAdmin.getPassword());
         umsAdmin.setPassword(encodePassword);
-        userMapper.insertSelective(umsAdmin);
+        userMapper.insert(umsAdmin);
         Role role=new Role();
 //        role.setCreateTime(new Date());
         role.setUserid(umsAdmin.getId());
         String roleType= Type;
         role.setName(roleType);
         role.setType(roleType);
-        roleMapper.insertSelective(role);
+        role.setDescription(roleType);
+        roleMapper.insertSelectiveWithoutID(role);
         return umsAdmin;
     }
 
@@ -115,9 +115,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     private boolean checkIfUserExist(String username) throws Exception{
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andUsernameEqualTo(username);
-        List<User> userList = userMapper.selectByExample(userExample);
+        List<User> userList = userMapper.selectByUsername(username);
         if (userList.size()==0){
             return false;
         }

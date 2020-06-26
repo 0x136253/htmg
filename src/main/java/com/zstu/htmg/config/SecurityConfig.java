@@ -7,7 +7,6 @@ import com.zstu.htmg.component.RestfulAccessDeniedHandler;
 import com.zstu.htmg.dto.AdminUserDetails;
 import com.zstu.htmg.mapper.RoleMapper;
 import com.zstu.htmg.pojo.Role;
-import com.zstu.htmg.pojo.RoleExample;
 import com.zstu.htmg.pojo.User;
 import com.zstu.htmg.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,9 +114,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             }
             if (admin != null) {
 //                return new AdminUserDetails(admin,roleMapper.selectByuserId(admin.getId()));
-                RoleExample roleExample=new RoleExample();
-                roleExample.createCriteria().andUseridEqualTo(admin.getId());
-                List<Role> roles=roleMapper.selectByExample(roleExample);
+                List<Role> roles=roleMapper.selectByUserID(admin.getId());
                 return new AdminUserDetails(admin,roles);
             }
             throw new UsernameNotFoundException("用户名或密码错误");
