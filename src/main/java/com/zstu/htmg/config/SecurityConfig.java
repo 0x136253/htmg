@@ -66,18 +66,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .permitAll()
                 .regexMatchers("/[\\S]*\\.[\\d\\w]{1,8}").permitAll()
-                .antMatchers("/admin/check", "/admin/login",
-                        "/admin/register",
-                        "/file/other/upload"
+                .antMatchers("/admin/check", "/admin/login"
                 )// 对登录注册要允许匿名访问
                 .permitAll()
                 .antMatchers(HttpMethod.OPTIONS)//跨域请求会先进行一次options请求
                 .permitAll()
 //                .antMatchers("/**")//测试时全部运行访问
 //                .permitAll()
-                .antMatchers("/admin").hasRole("ADMIN")
-                .antMatchers("/system").hasRole("SYSTEM")
-                .antMatchers("/user").hasRole("USER")
                 .anyRequest()// 除上面外的所有请求全部需要鉴权认证
                 .authenticated();
         // 禁用缓存

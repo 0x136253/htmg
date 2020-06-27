@@ -12,6 +12,6 @@ import java.lang.annotation.*;
 @Documented //生成文档
 public @interface MyLog {
     String operation() default "";
-    String database() default "null database";
+    String database() default "null";
     boolean flag() default true;
  }

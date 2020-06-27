@@ -1,8 +1,14 @@
 package com.zstu.htmg;
 
+import com.zstu.htmg.dto.AllRoomInfoDTO;
+import com.zstu.htmg.dto.RoomDetailDTO;
+import com.zstu.htmg.dto.RoomInfoDTO;
+import com.zstu.htmg.mapper.GuestMapper;
 import com.zstu.htmg.mapper.RoleMapper;
+import com.zstu.htmg.mapper.RoomMapper;
 import com.zstu.htmg.mapper.UserMapper;
 import com.zstu.htmg.pojo.Role;
+import com.zstu.htmg.pojo.Room;
 import com.zstu.htmg.pojo.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +23,10 @@ class HtmgApplicationTests {
     private UserMapper userMapper;
     @Autowired
     private RoleMapper roleMapper;
+    @Autowired
+    private RoomMapper roomMapper;
+    @Autowired
+    private GuestMapper guestMapper;
     @Test
     void UserRoleSelectTest() {
         User user = userMapper.selectByUsername("Anon").get(0);
@@ -43,4 +53,27 @@ class HtmgApplicationTests {
         roleMapper.insertSelectiveWithoutID(role);
     }
 
+    @Test
+    void RoomSelectTest() {
+//        List<String> stringList = roomMapper.selectTagsByHotelId(101,10002);
+//        for (String record:stringList){
+//            System.out.println(record);
+//        }
+        RoomDetailDTO roomDetailDTO = roomMapper.selectRoomDetailByID(101);
+        System.out.println(roomDetailDTO);
+//        List<RoomInfoDTO> roomInfoDTOList = roomMapper.selectRoomInfoByHotelId(10002);
+//        for (RoomInfoDTO record:roomInfoDTOList){
+//            System.out.println(record);
+//        }
+//
+//        List<AllRoomInfoDTO> allRoomInfoDTOList = roomMapper.selectAllRoomInfo();
+//        for (AllRoomInfoDTO record:allRoomInfoDTOList){
+//            System.out.println(record);
+//        }
+    }
+
+    @Test
+    void GuestSelectTest(){
+        System.out.println(guestMapper.selectGuestById(2));
+    }
 }
