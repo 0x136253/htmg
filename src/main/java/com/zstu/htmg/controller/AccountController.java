@@ -4,8 +4,7 @@ package com.zstu.htmg.controller;
 import com.zstu.htmg.api.CommonResult;
 import com.zstu.htmg.api.MyLog;
 import com.zstu.htmg.component.RoleComponent;
-import com.zstu.htmg.dto.UserLoginDTO;
-import com.zstu.htmg.dto.UserRegisterAdminDTO;
+import com.zstu.htmg.dto.*;
 import com.zstu.htmg.pojo.User;
 import com.zstu.htmg.service.AdminService;
 import com.zstu.htmg.util.JwtTokenUtil;
@@ -64,6 +63,54 @@ public class AccountController {
         tokenMap.put("RoleType", roleComponent.getRoleTypeByUsername(userLoginDTO.getUsername()));
         tokenMap.put("HotelId", roleComponent.getHotelId(userLoginDTO.getUsername()));
         return CommonResult.success(tokenMap);
+    }
+
+    @MyLog(operation = "获取账户信息",database = "user,role,employee,employeetype,hotel")
+    @ApiOperation(value = "获取账户信息")
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ROOT','SYSTEM','HOTEL','MANAGER','USER')")
+    public ResponseEntity<Map<String,Object>> getUserInfo(){
+        UserInfoDTO user = null;
+        try {
+            user = adminService.getUserInfo(GetUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(user);
+    }
+
+    @MyLog(operation = "修改用户名",database = "user,role,employee,employeetype,hotel")
+    @ApiOperation(value = "修改用户名")
+    @RequestMapping(value = "/usernameChange", method = RequestMethod.POST)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ROOT','SYSTEM','HOTEL','MANAGER','USER')")
+    public ResponseEntity<Map<String,Object>> usernameChange(@RequestBody UsernameChangeDTO usernameChangeDTO){
+        boolean answ = false;
+        try {
+            answ = adminService.usernameChange(usernameChangeDTO,GetUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(answ);
+    }
+
+    @MyLog(operation = "修改密码",database = "user,role,employee,employeetype,hotel")
+    @ApiOperation(value = "修改密码")
+    @RequestMapping(value = "/passwordChange", method = RequestMethod.POST)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ROOT','SYSTEM','HOTEL','MANAGER','USER')")
+    public ResponseEntity<Map<String,Object>> passwordChange(@RequestBody PasswordChangeDTO passwordChangeDTO){
+        boolean answ = false;
+        try {
+            answ = adminService.passwordChange(passwordChangeDTO,GetUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(answ);
     }
 
     @MyLog(operation = "注册",database = "user,role")

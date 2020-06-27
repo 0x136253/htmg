@@ -1,6 +1,9 @@
 package com.zstu.htmg.service.Impl;
 
 import com.zstu.htmg.dto.AdminUserDetails;
+import com.zstu.htmg.dto.PasswordChangeDTO;
+import com.zstu.htmg.dto.UserInfoDTO;
+import com.zstu.htmg.dto.UsernameChangeDTO;
 import com.zstu.htmg.mapper.RoleMapper;
 import com.zstu.htmg.mapper.UserMapper;
 import com.zstu.htmg.pojo.Role;
@@ -110,8 +113,31 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public UserInfoDTO getUserInfo(String username) throws Exception {
+        return userMapper.selectUserInfoByUserName(username);
+    }
+
+    @Override
     public void logout(String username) throws Exception {
 
+    }
+
+    @Override
+    public boolean usernameChange(UsernameChangeDTO usernameChangeDTO,String oldUsername) throws Exception {
+        String newUsername = usernameChangeDTO.getNewUsername();
+        if (checkIfUserExist(newUsername)){
+            throw new Exception("该账号已存在");
+        }
+        userMapper.updateUsername(oldUsername,newUsername);
+        return true;
+    }
+
+    @Override
+    public boolean passwordChange(PasswordChangeDTO passwordChangeDTO,String username) throws Exception {
+        String newPassword = passwordChangeDTO.getNewPassword();
+        newPassword = passwordEncoder.encode(newPassword);
+        userMapper.updatePassword(username,newPassword);
+        return true;
     }
 
     private boolean checkIfUserExist(String username) throws Exception{

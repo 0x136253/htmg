@@ -129,7 +129,10 @@ public class SysLogAspect {
         if (authHeader != null) {
             String authToken = authHeader;
             String username = jwtTokenUtil.getUserNameFromToken(authToken);
-            sysLog.setUserid(userMapper.selectUserIDByUsername(username).get(0));
+            List<String> userlist = userMapper.selectUserIDByUsername(username);
+            if (userlist.size()>=1) {
+                sysLog.setUserid(userlist.get(0));
+            }
         }
         //获取用户ip地址
         try {
