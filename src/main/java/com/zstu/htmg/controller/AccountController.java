@@ -3,6 +3,7 @@ package com.zstu.htmg.controller;
 
 import com.zstu.htmg.api.CommonResult;
 import com.zstu.htmg.api.MyLog;
+import com.zstu.htmg.component.RoleComponent;
 import com.zstu.htmg.dto.UserLoginDTO;
 import com.zstu.htmg.dto.UserRegisterAdminDTO;
 import com.zstu.htmg.pojo.User;
@@ -31,6 +32,8 @@ public class AccountController {
     private AdminService adminService;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private RoleComponent roleComponent;
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
 
@@ -50,7 +53,7 @@ public class AccountController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Map<String,Object>> login(@RequestBody UserLoginDTO userLoginDTO){
-        Map<String, String> tokenMap = new HashMap<>();
+        Map<String, Object> tokenMap = new HashMap<>();
         String token = null;
         try {
             token = adminService.login(userLoginDTO.getUsername(),userLoginDTO.getPassword());
@@ -58,6 +61,8 @@ public class AccountController {
             return CommonResult.failed(e.getMessage());
         }
         tokenMap.put("token", token);
+        tokenMap.put("RoleType", roleComponent.getRoleTypeByUsername(userLoginDTO.getUsername()));
+        tokenMap.put("HotelId", roleComponent.getHotelId(userLoginDTO.getUsername()));
         return CommonResult.success(tokenMap);
     }
 
@@ -65,7 +70,7 @@ public class AccountController {
     @ApiOperation(value = "注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    @PreAuthorize("hasAnyRole('ROOT','SYSTEM','HOTEL')")
+    @PreAuthorize("hasAnyRole('ROOT')")
     public ResponseEntity<Map<String,Object>> registerAdmin(@RequestBody UserRegisterAdminDTO userRegisterAdminDTO){
         User user = null;
         try {

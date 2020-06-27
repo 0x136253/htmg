@@ -14,9 +14,9 @@ import java.util.List;
  * @Date: 2020/6/27 14:33
  */
 public interface EmployeeService {
-    EmployeeInfoDTO getEmployeeById(int id) throws Exception;
-    Boolean insertNewEmployee(EmployeeAddDTO employeeAddDTO) throws Exception;
-    List<EmployeeInfoDTO> getEmployeeByHotel(int hotelId) throws Exception;
+    EmployeeInfoDTO getEmployeeById(int id,String username) throws Exception;
+    Boolean insertNewEmployee(EmployeeAddDTO employeeAddDTO,String username) throws Exception;
+    List<EmployeeInfoDTO> getEmployeeByHotel(int hotelId,String username) throws Exception;
     List<IdTypeDTO> getIdAndType(String username) throws Exception;
     List<IdHotelDTO> getIdAndHotel(String username) throws Exception;
 }

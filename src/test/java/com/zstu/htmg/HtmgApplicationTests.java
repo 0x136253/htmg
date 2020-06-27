@@ -1,12 +1,11 @@
 package com.zstu.htmg;
 
+import com.zstu.htmg.component.RoleComponent;
 import com.zstu.htmg.dto.AllRoomInfoDTO;
 import com.zstu.htmg.dto.RoomDetailDTO;
 import com.zstu.htmg.dto.RoomInfoDTO;
-import com.zstu.htmg.mapper.GuestMapper;
-import com.zstu.htmg.mapper.RoleMapper;
-import com.zstu.htmg.mapper.RoomMapper;
-import com.zstu.htmg.mapper.UserMapper;
+import com.zstu.htmg.mapper.*;
+import com.zstu.htmg.pojo.Employee;
 import com.zstu.htmg.pojo.Role;
 import com.zstu.htmg.pojo.Room;
 import com.zstu.htmg.pojo.User;
@@ -27,6 +26,10 @@ class HtmgApplicationTests {
     private RoomMapper roomMapper;
     @Autowired
     private GuestMapper guestMapper;
+    @Autowired
+    private EmployeeMapper employeeMapper;
+    @Autowired
+    private RoleComponent roleComponent;
     @Test
     void UserRoleSelectTest() {
         User user = userMapper.selectByUsername("Anon").get(0);
@@ -35,6 +38,11 @@ class HtmgApplicationTests {
         System.out.println(role);
         role = roleMapper.selectByUserID("a7a06815-5291-5396-928b-4438aa276d48");
         System.out.println(role);
+        String type = roleMapper.selectRoleTypeByUsername("Anon");
+        System.out.println(type);
+        System.out.println(employeeMapper.SelectHotelidByUsername("555736452920"));
+        System.out.println(employeeMapper.SelectHotelidByUsername("Anon"));
+        System.out.println(roleComponent.getHotelId("Anon"));
     }
 
     @Test

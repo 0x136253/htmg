@@ -25,4 +25,7 @@ public interface RoleMapper {
     @Select("select * from role where UserID = #{userID}")
     @ResultMap(value = "roleMap")
     List<Role> selectByUserID(@Param("userID") String userID);
+
+    @Select("select role.type from role left join user on user.ID = role.UserID where user.username = #{username};")
+    String selectRoleTypeByUsername(@Param("username") String username);
 }

@@ -1,6 +1,7 @@
 package com.zstu.htmg.dto;
 
 import com.zstu.htmg.pojo.Guest;
+import io.swagger.models.auth.In;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 public class RoomDetailDTO {
     private Integer id;
     private String roomid;
+    private Integer hotelid;
     private String name;
     private String type;
     private Integer story;
@@ -24,6 +26,7 @@ public class RoomDetailDTO {
         return "RoomDetailDTO{" +
                 "id=" + id +
                 ", roomid='" + roomid + '\'' +
+                ", hotelid=" + hotelid +
                 ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
                 ", story=" + story +
@@ -31,6 +34,14 @@ public class RoomDetailDTO {
                 ", price=" + price +
                 ", guests=" + guests +
                 '}';
+    }
+
+    public Integer getHotelid() {
+        return hotelid;
+    }
+
+    public void setHotelid(Integer hotelid) {
+        this.hotelid = hotelid;
     }
 
     public Integer getId() {

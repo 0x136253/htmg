@@ -1,5 +1,7 @@
 package com.zstu.htmg.dto;
 
+import com.zstu.htmg.pojo.Employee;
+
 /**
  * @Author: Anonsmd
  * @Date: 2020/6/27 14:45
@@ -9,7 +11,7 @@ public class EmployeeAddDTO {
     private String phone;
     private Integer typeid;
     private Integer hotelid;
-    private String username;
+    private String role;
 
     @Override
     public String toString() {
@@ -18,10 +20,18 @@ public class EmployeeAddDTO {
                 ", phone='" + phone + '\'' +
                 ", typeid=" + typeid +
                 ", hotelid=" + hotelid +
-                ", username='" + username + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 
+    public Employee toEmployee(){
+        Employee employee = new Employee();
+        employee.setName(name);
+        employee.setPhone(phone);
+        employee.setTypeid(typeid);
+        employee.setHotelid(hotelid);
+        return employee;
+    }
     public String getName() {
         return name;
     }
@@ -54,11 +64,11 @@ public class EmployeeAddDTO {
         this.hotelid = hotelid;
     }
 
-    public String getUsername() {
-        return username;
+    public String getRole() {
+        return role;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

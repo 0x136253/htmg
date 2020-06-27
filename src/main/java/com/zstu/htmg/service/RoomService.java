@@ -13,7 +13,7 @@ import java.util.List;
 public interface RoomService {
     List<AllRoomInfoDTO> getAllRoomsInfo() throws Exception;
 
-    List<RoomInfoDTO> getRoomsInfo(int hotelid) throws Exception;
+    List<RoomInfoDTO> getRoomsInfo(int hotelid,String username) throws Exception;
 
     RoomDetailDTO getRoomDetail(int id,String username) throws Exception;
 }

@@ -76,7 +76,7 @@ public class RoomController {
     public ResponseEntity<Map<String,Object>> getRoomsInfo(@PathVariable int hotelid){
         List<RoomInfoDTO> answ = null;
         try {
-            answ = roomService.getRoomsInfo(hotelid);
+            answ = roomService.getRoomsInfo(hotelid,GetUsername());
         } catch (Exception e) {
             e.printStackTrace();
             return CommonResult.failed(e.getMessage());

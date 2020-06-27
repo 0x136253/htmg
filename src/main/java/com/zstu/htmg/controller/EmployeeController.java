@@ -57,7 +57,7 @@ public class EmployeeController {
     public ResponseEntity<Map<String,Object>> getEmployeeById(@PathVariable int id){
         EmployeeInfoDTO answ = null;
         try {
-            answ = employeeService.getEmployeeById(id);
+            answ = employeeService.getEmployeeById(id,GetUsername());
         } catch (Exception e) {
             e.printStackTrace();
             return CommonResult.failed(e.getMessage());
@@ -70,10 +70,10 @@ public class EmployeeController {
     @RequestMapping(value = "/insertNewEmployee", method = RequestMethod.POST)
     @ResponseBody
     @PreAuthorize("hasAnyRole('ROOT','SYSTEM','HOTEL','MANAGER')")
-    public ResponseEntity<Map<String,Object>> insertNewEmployee(@PathVariable EmployeeAddDTO employeeAddDTO){
+    public ResponseEntity<Map<String,Object>> insertNewEmployee(@RequestBody EmployeeAddDTO employeeAddDTO){
         boolean answ = false;
         try {
-            answ = employeeService.insertNewEmployee(employeeAddDTO);
+            answ = employeeService.insertNewEmployee(employeeAddDTO,GetUsername());
         } catch (Exception e) {
             e.printStackTrace();
             return CommonResult.failed(e.getMessage());
@@ -89,7 +89,7 @@ public class EmployeeController {
     public ResponseEntity<Map<String,Object>> getEmployeeByHotel(@PathVariable int hotelid){
         List<EmployeeInfoDTO> answ = null;
         try {
-            answ = employeeService.getEmployeeByHotel(hotelid);
+            answ = employeeService.getEmployeeByHotel(hotelid,GetUsername());
         } catch (Exception e) {
             e.printStackTrace();
             return CommonResult.failed(e.getMessage());

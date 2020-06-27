@@ -41,10 +41,11 @@ public interface RoomMapper {
     @Select("Select roomState.roomState from roomState where roomId = #{roomId,jdbcType=INTEGER}")
     List<String> selectStatesByRoomID(@Param("roomId")Integer roomId);
 
-    @Select("select room.id,room.roomId,room.name,type.name as type,room.story,price.basePrice from room left join type on type.id = room.typeid left join price on price.id = type.priceId where room.id = #{id,jdbcType=INTEGER}")
+    @Select("select room.id,room.roomId,room.hotelId,room.name,type.name as type,room.story,price.basePrice from room left join type on type.id = room.typeid left join price on price.id = type.priceId where room.id = #{id,jdbcType=INTEGER}")
     @Results(id = "roomDetailDTOMap",value={
             @Result(id = true, column = "id", property = "id"),
             @Result(column = "roomId", property = "roomid"),
+            @Result(column = "hotelId", property = "hotelid"),
             @Result(column = "name", property = "name"),
             @Result(column = "type", property = "type"),
             @Result(column = "story", property = "story"),
