@@ -1,5 +1,6 @@
 package com.zstu.htmg.service.Impl;
 
+import com.zstu.htmg.dto.GuestDetailDTO;
 import com.zstu.htmg.mapper.GuestMapper;
 import com.zstu.htmg.pojo.Guest;
 import com.zstu.htmg.service.GuestService;
@@ -18,5 +19,10 @@ public class GuestServeiceImpl implements GuestService {
     @Override
     public Guest getGuestDetail(int id) throws Exception {
         return guestMapper.selectGuestById(id);
+    }
+
+    @Override
+    public GuestDetailDTO getGuestDetailAndTimeInfo(int id) throws Exception {
+        return guestMapper.selectGuestDetailById(id);
     }
 }

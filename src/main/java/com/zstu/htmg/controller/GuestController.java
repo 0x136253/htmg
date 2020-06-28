@@ -3,6 +3,7 @@ package com.zstu.htmg.controller;
 import com.zstu.htmg.api.CommonResult;
 import com.zstu.htmg.api.MyLog;
 import com.zstu.htmg.dto.AllRoomInfoDTO;
+import com.zstu.htmg.dto.GuestDetailDTO;
 import com.zstu.htmg.pojo.Guest;
 import com.zstu.htmg.service.GuestService;
 import com.zstu.htmg.service.RoomService;
@@ -60,6 +61,22 @@ public class GuestController {
         Guest answ = null;
         try {
             answ = guestService.getGuestDetail(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(answ);
+    }
+
+    @MyLog(operation = "获取指定客人信息及入住信息",database = "guest,guestlist")
+    @ApiOperation(value = "获取指定客人信息及入住信息")
+    @RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ROOT','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getGuestDetailAndTimeInfo(@PathVariable int id){
+        GuestDetailDTO answ = null;
+        try {
+            answ = guestService.getGuestDetailAndTimeInfo(id);
         } catch (Exception e) {
             e.printStackTrace();
             return CommonResult.failed(e.getMessage());
