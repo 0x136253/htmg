@@ -56,7 +56,7 @@ public class GuestController {
     @ApiOperation(value = "获取指定客人信息")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    @PreAuthorize("hasAnyRole('ROOT','SYSTEM')")
+    @PreAuthorize("hasAnyRole('ROOT','SYSTEM','HOTEL','MANAGER')")
     public ResponseEntity<Map<String,Object>> getGuestDetail(@PathVariable int id){
         Guest answ = null;
         try {
@@ -72,11 +72,27 @@ public class GuestController {
     @ApiOperation(value = "获取指定客人信息及入住信息")
     @RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
     @ResponseBody
-    @PreAuthorize("hasAnyRole('ROOT','SYSTEM')")
+    @PreAuthorize("hasAnyRole('ROOT','SYSTEM','HOTEL','MANAGER')")
     public ResponseEntity<Map<String,Object>> getGuestDetailAndTimeInfo(@PathVariable int id){
         GuestDetailDTO answ = null;
         try {
             answ = guestService.getGuestDetailAndTimeInfo(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(answ);
+    }
+
+    @MyLog(operation = "获取指定宾馆客人信息及入住信息",database = "room,guest,guestlist")
+    @ApiOperation(value = "获取指定宾馆客人信息及入住信息")
+    @RequestMapping(value = "/hotel", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ROOT','SYSTEM','HOTEL','MANAGER')")
+    public ResponseEntity<Map<String,Object>> getGuestByHotel(){
+        List<GuestDetailDTO> answ = null;
+        try {
+            answ = guestService.getGuestDetailByHotelId(GetUsername());
         } catch (Exception e) {
             e.printStackTrace();
             return CommonResult.failed(e.getMessage());

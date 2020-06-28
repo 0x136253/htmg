@@ -8,14 +8,24 @@ import java.util.Date;
  */
 public class RoomTimeInfoDTO {
     private int id;
+    private int hotelId;
     private Date checkintime;
     private Date checkouttime;
     private Date duetime;
+
+    public int getHotelId() {
+        return hotelId;
+    }
+
+    public void setHotelId(int hotelId) {
+        this.hotelId = hotelId;
+    }
 
     @Override
     public String toString() {
         return "RoomTimeInfoDTO{" +
                 "id=" + id +
+                ", hotelId=" + hotelId +
                 ", checkintime=" + checkintime +
                 ", checkouttime=" + checkouttime +
                 ", duetime=" + duetime +

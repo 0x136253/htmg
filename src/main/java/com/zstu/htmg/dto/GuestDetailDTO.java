@@ -15,7 +15,7 @@ public class GuestDetailDTO {
     private String gender;
     private Boolean isvip;
     private Integer vipid;
-    private List<RoomTimeInfoDTO> times;
+    private List<RoomTimeInfoDTO> rooms;
 
     @Override
     public String toString() {
@@ -27,7 +27,7 @@ public class GuestDetailDTO {
                 ", gender='" + gender + '\'' +
                 ", isvip=" + isvip +
                 ", vipid=" + vipid +
-                ", times=" + times +
+                ", rooms=" + rooms +
                 '}';
     }
 
@@ -87,11 +87,11 @@ public class GuestDetailDTO {
         this.vipid = vipid;
     }
 
-    public List<RoomTimeInfoDTO> getTimes() {
-        return times;
+    public List<RoomTimeInfoDTO> getRooms() {
+        return rooms;
     }
 
-    public void setTimes(List<RoomTimeInfoDTO> times) {
-        this.times = times;
+    public void setRooms(List<RoomTimeInfoDTO> rooms) {
+        this.rooms = rooms;
     }
 }

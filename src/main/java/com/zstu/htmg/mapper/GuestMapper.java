@@ -34,6 +34,15 @@ public interface GuestMapper {
     })
     Guest selectGuestById(@Param("id") Integer id);
 
+    @Select("select guest.* from guest where exists(select guestlist.roomId from guestlist left join room on room.id = guestlist.roomId where guestlist.guestid=guest.id and room.hotelId = #{hotelId})")
+    @ResultMap(value = "GuestDetailDTOMap")
+    List<GuestDetailDTO> selectGuestByHotelId(@Param("hotelId") Integer hotelId);
+
+
+    @Select("select guest.* from guest where exists(select guestlist.roomId from guestlist left join room on room.id = guestlist.roomId where guestlist.guestid=guest.id)")
+    @ResultMap(value = "GuestDetailDTOMap")
+    List<GuestDetailDTO> selectGuestByAll();
+
     @Select("select * from guest where id = #{id,jdbcType = INTEGER}")
     @Results(id = "GuestDetailDTOMap",value = {
             @Result(id = true,column = "id",property = "id"),
@@ -43,7 +52,7 @@ public interface GuestMapper {
             @Result(column = "gender",property = "gender"),
             @Result(column = "isVip",property = "isvip"),
             @Result(column = "vipId",property = "vipid"),
-            @Result(column = "id",property = "times",many = @Many(select = "com.zstu.htmg.mapper.GuestListMapper.selectRoomTimeByGuestID"))
+            @Result(column = "id",property = "rooms",many = @Many(select = "com.zstu.htmg.mapper.GuestListMapper.selectRoomTimeByGuestID"))
     })
     GuestDetailDTO selectGuestDetailById(@Param("id") Integer id);
 }
