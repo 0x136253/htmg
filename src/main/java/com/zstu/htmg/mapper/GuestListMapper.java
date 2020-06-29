@@ -1,11 +1,9 @@
 package com.zstu.htmg.mapper;
 
 import com.zstu.htmg.dto.RoomTimeInfoDTO;
+import com.zstu.htmg.pojo.Guest;
 import com.zstu.htmg.pojo.GuestList;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -20,4 +18,7 @@ public interface GuestListMapper {
             @Result(column = "dueTime",property = "duetime")
     })
     List<RoomTimeInfoDTO> selectRoomTimeByGuestID(@Param("guestid") Integer guestid);
+
+    @Insert("insert into guestlist(checkInTime,dueTime,guestId,roomId) values(Now(),#{duetime},#{guestid},#{roomid})")
+    void InsertSelectiveWithoutIdAndCheckoutTimeAndIsOver(GuestList guestList);
 }

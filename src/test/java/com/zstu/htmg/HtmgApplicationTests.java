@@ -5,10 +5,7 @@ import com.zstu.htmg.dto.AllRoomInfoDTO;
 import com.zstu.htmg.dto.RoomDetailDTO;
 import com.zstu.htmg.dto.RoomInfoDTO;
 import com.zstu.htmg.mapper.*;
-import com.zstu.htmg.pojo.Employee;
-import com.zstu.htmg.pojo.Role;
-import com.zstu.htmg.pojo.Room;
-import com.zstu.htmg.pojo.User;
+import com.zstu.htmg.pojo.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -82,6 +79,17 @@ class HtmgApplicationTests {
 
     @Test
     void GuestSelectTest(){
+        System.out.println(guestMapper.selectGuestById(2));
+    }
+
+    @Test
+    void GuestInsertest(){
+        Guest answ = new Guest();
+        answ.setName("SS");
+        answ.setSocialid("SS");
+        answ.setPhone("SS");
+        answ.setGender("SS");
+        guestMapper.InsertSelectivwWithoutIdAndIsVipAndVip(answ);
         System.out.println(guestMapper.selectGuestById(2));
     }
 }

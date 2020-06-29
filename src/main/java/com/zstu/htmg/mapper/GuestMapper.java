@@ -55,4 +55,27 @@ public interface GuestMapper {
             @Result(column = "id",property = "rooms",many = @Many(select = "com.zstu.htmg.mapper.GuestListMapper.selectRoomTimeByGuestID"))
     })
     GuestDetailDTO selectGuestDetailById(@Param("id") Integer id);
+
+
+    @Insert("insert into guest(name,socialId,phone,gender,vipId) values(#{name},#{socialid},#{phone},#{gender},1)")
+    void InsertSelectivwWithoutIdAndIsVipAndVip(Guest guest);
+
+    @Select("select * from guest where phone = #{phone}")
+    @ResultMap(value = "guestMap")
+    Guest selectByPhone(@Param("phone") String phone);
+
+    @Select("select * from guest where socialId = #{socialId}")
+    @ResultMap(value = "guestMap")
+    Guest selectBySocialId(@Param("socialId") String socialId);
+
+    @Select("select if(count(*)=0,false,true) from guest where socialId = #{socialId}")
+    boolean checkBySocialId(@Param("socialId") String socialId);
+
+    /**
+     * 需改成存储过程，用事务锁死该表，以防第三则更改,与Insert相结合
+     * @return
+     */
+    @Select("select max(id) from guest")
+    int returnId();
 }
+

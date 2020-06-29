@@ -55,4 +55,8 @@ public interface RoomMapper {
 
     })
     RoomDetailDTO selectRoomDetailByID(@Param("id")Integer id);
+
+    @Select("select room.id,room.roomId,room.hotelId,room.name,type.name as type,room.story,price.basePrice from room left join type on type.id = room.typeid left join roomState on room.id = roomState.roomId left join price on price.id = type.priceId where room.typeid =#{typeId,jdbcType=INTEGER} and roomState.roomState =1 and room.hotelId = #{hotelId,jdbcType=INTEGER}")
+    @ResultMap(value = "roomDetailDTOMap")
+    List<RoomDetailDTO> selectEmptyRoomByTypeIdAndHotelId(@Param("typeId")Integer typeId,@Param("hotelId")Integer hotelId);
 }

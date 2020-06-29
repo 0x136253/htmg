@@ -2,8 +2,7 @@ package com.zstu.htmg.controller;
 
 import com.zstu.htmg.api.CommonResult;
 import com.zstu.htmg.api.MyLog;
-import com.zstu.htmg.dto.AllRoomInfoDTO;
-import com.zstu.htmg.dto.GuestDetailDTO;
+import com.zstu.htmg.dto.*;
 import com.zstu.htmg.pojo.Guest;
 import com.zstu.htmg.service.GuestService;
 import com.zstu.htmg.service.RoomService;
@@ -15,10 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -93,6 +89,38 @@ public class GuestController {
         List<GuestDetailDTO> answ = null;
         try {
             answ = guestService.getGuestDetailByHotelId(GetUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(answ);
+    }
+
+    @MyLog(operation = "客人入住",database = "guest,guestlist")
+    @ApiOperation(value = "客人入住")
+    @RequestMapping(value = "/checkin", method = RequestMethod.POST)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ROOT','SYSTEM','HOTEL','MANAGER')")
+    public ResponseEntity<Map<String,Object>> guestCheckIn(@RequestBody GuestInDTO guestInDTO){
+        RoomDetailDTO answ = null;
+        try {
+            answ = guestService.guestCheckIn(guestInDTO,GetUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(answ);
+    }
+
+    @MyLog(operation = "返回房间类型和ID关系",database = "room,type")
+    @ApiOperation(value = "返回房间类型和ID关系")
+    @RequestMapping(value = "/RoomType", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ROOT','SYSTEM','HOTEL','MANAGER')")
+    public ResponseEntity<Map<String,Object>> guestRoomType(){
+        List<IdTypeDTO> answ = null;
+        try {
+            answ = guestService.guestRoomType(GetUsername());
         } catch (Exception e) {
             e.printStackTrace();
             return CommonResult.failed(e.getMessage());
