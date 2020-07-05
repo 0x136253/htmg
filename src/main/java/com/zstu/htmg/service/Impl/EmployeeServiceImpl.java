@@ -81,6 +81,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (userHotelId != 0 && userHotelId != hotelId){
             throw new Exception("you can't get employee information who is't in your hotel");
         }
+        if (userHotelId ==0 && hotelId ==0){
+            return employeeMapper.SelectEmployeeInfo();
+        }
         return employeeMapper.SelectEmployeeInfoByHotelid(hotelId);
     }
 

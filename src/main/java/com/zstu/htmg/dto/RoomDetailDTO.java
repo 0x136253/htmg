@@ -16,6 +16,7 @@ public class RoomDetailDTO {
     private Integer hotelid;
     private String name;
     private String type;
+    private int capacity;
     private Integer story;
     private List<String> tags;
     private BigDecimal price;
@@ -29,11 +30,20 @@ public class RoomDetailDTO {
                 ", hotelid=" + hotelid +
                 ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
+                ", capacity=" + capacity +
                 ", story=" + story +
                 ", tags=" + tags +
                 ", price=" + price +
                 ", guests=" + guests +
                 '}';
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     public Integer getHotelid() {

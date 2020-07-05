@@ -50,4 +50,9 @@ public interface EmployeeMapper {
 
     @Select("select employee.hotelid from user left join employee on employee.userid = user.id where user.username=#{username}")
     Integer SelectHotelidByUsername(@Param("username") String username);
+
+
+    @Select("select employee.id,employee.name,employee.phone,employeetype.name as 'type',employee.hotelid,hotel.name as 'hotelName',user.username from employee left join user on employee.userid = user.id left join hotel on employee.hotelid = hotel.id left join employeetype on employeetype.id = employee.typeid")
+    @ResultMap(value = "employeeInfoDTOMap")
+    List<EmployeeInfoDTO> SelectEmployeeInfo();
 }

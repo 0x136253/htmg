@@ -23,7 +23,7 @@ public interface UserMapper {
     @Select("select ID from user where username = #{username}")
     List<String> selectUserIDByUsername(@Param("username")String username);
 
-    @Select("select employee.name,employee.phone,employeetype.name as 'type',hotel.name as 'hotel',role.description as 'role' from user left join employee on employee.userid = user.id left join employeetype on employeetype.id = employee.typeid left join hotel on hotel.id = employee.hotelid left join role on role.UserID = user.id where user.username=#{username}")
+    @Select("select employee.name,employee.phone,employeetype.name as 'type',hotel.name as 'hotel',role.type as 'role' from user left join employee on employee.userid = user.id left join employeetype on employeetype.id = employee.typeid left join hotel on hotel.id = employee.hotelid left join role on role.UserID = user.id where user.username=#{username}")
     @Results(id = "UserInfoDTOMap", value={
             @Result(column = "name", property = "name"),
             @Result(column = "phone", property = "phone"),

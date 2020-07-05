@@ -1,9 +1,6 @@
 package com.zstu.htmg.service;
 
-import com.zstu.htmg.dto.GuestDetailDTO;
-import com.zstu.htmg.dto.GuestInDTO;
-import com.zstu.htmg.dto.IdTypeDTO;
-import com.zstu.htmg.dto.RoomDetailDTO;
+import com.zstu.htmg.dto.*;
 import com.zstu.htmg.pojo.Guest;
 
 import java.util.List;
@@ -16,9 +13,11 @@ public interface GuestService {
     Guest getGuestDetail(int id) throws Exception;
 
     GuestDetailDTO getGuestDetailAndTimeInfo(int id) throws Exception;
-    List<GuestDetailDTO> getGuestDetailByHotelId(String username) throws Exception;
+    List<GuestDetailDTO> getGuestDetailByHotelId(String username,int pageNum,int pageSize) throws Exception;
 
     RoomDetailDTO guestCheckIn(GuestInDTO guestInDTO, String getUserusernamename) throws Exception;
 
-    List<IdTypeDTO> guestRoomType(String username) throws Exception;
+    List<IdTypeNumDTO> guestRoomType(String username) throws Exception;
+
+    List<GuestDetailDTO> searchGuest(String key) throws Exception;
 }

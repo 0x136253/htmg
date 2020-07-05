@@ -42,13 +42,13 @@ public class GuestServeiceImpl implements GuestService {
     }
 
     @Override
-    public List<GuestDetailDTO> getGuestDetailByHotelId(String username) throws Exception {
+    public List<GuestDetailDTO> getGuestDetailByHotelId(String username,int pageNum,int pageSize) throws Exception {
         int userHotelId = roleComponent.getHotelId(username);
         if (userHotelId == 0){
             return guestMapper.selectGuestByAll();
         }
         else{
-            return guestMapper.selectGuestByHotelId(userHotelId);
+            return guestMapper.selectGuestByHotelId(userHotelId,(pageNum-1)*pageSize,pageSize);
         }
     }
 
@@ -59,9 +59,12 @@ public class GuestServeiceImpl implements GuestService {
             throw new Exception("No Room Exist");
         }
         RoomDetailDTO targetRoom = emptyRoom.get(0);
+        if (targetRoom.getCapacity()<guestInDTO.getGuests().size()){
+            throw new Exception("Too Many People");
+        }
         for (GuestDTO record:guestInDTO.getGuests()){
             if (guestMapper.checkBySocialId(record.getSocialid())){
-                Guest guest = guestMapper.selectBySocialId(record.getSocialid());
+                GuestDetailDTO guest = guestMapper.selectBySocialId(record.getSocialid()).get(0);
                 GuestList guestList = new GuestList();
                 guestList.setDuetime(guestInDTO.getDueTime());
                 guestList.setGuestid(guest.getId());
@@ -83,9 +86,22 @@ public class GuestServeiceImpl implements GuestService {
     }
 
     @Override
-    public List<IdTypeDTO> guestRoomType(String username) throws Exception {
+    public List<IdTypeNumDTO> guestRoomType(String username) throws Exception {
 //        List<IdTypeDTO> answ = new ArrayList<>();
 //        answ.add(new IdTypeDTO());
         return typeMapper.SelectEmptyRoomIdAndType(roleComponent.getHotelId(username));
+    }
+
+    @Override
+    public List<GuestDetailDTO> searchGuest(String key) throws Exception {
+        List<GuestDetailDTO> phoneList = guestMapper.selectByPhone(key);
+        List<GuestDetailDTO> socialList = guestMapper.selectBySocialId(key);
+        List<GuestDetailDTO> answ = new ArrayList<>();
+        answ.addAll(phoneList);
+        answ.addAll(socialList);
+        if (phoneList.size()==0 && socialList.size() == 0){
+            throw new Exception("can't find");
+        }
+        return answ;
     }
 }

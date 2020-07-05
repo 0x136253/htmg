@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface GuestListMapper {
 
-    @Select("select guestlist.roomId,room.hotelId,guestlist.checkInTime,guestlist.checkoutTime,guestlist.dueTime from guestlist left join room on room.id = guestlist.roomId where guestlist.guestId = #{guestid}")
+    @Select("select guestlist.roomId,room.hotelId,guestlist.checkInTime,guestlist.checkoutTime,guestlist.dueTime from guestlist left join room on room.id = guestlist.roomId where guestlist.guestId = #{guestid} and isnull(guestlist.checkoutTime)")
     @Results(id = "RoomTimeInfoDTOMap",value = {
             @Result(id = true,column = "roomId",property = "id"),
             @Result(column = "hotelId",property = "hotelId"),
@@ -21,4 +21,7 @@ public interface GuestListMapper {
 
     @Insert("insert into guestlist(checkInTime,dueTime,guestId,roomId) values(Now(),#{duetime},#{guestid},#{roomid})")
     void InsertSelectiveWithoutIdAndCheckoutTimeAndIsOver(GuestList guestList);
+
+    @Update("update guestlist set checkoutTime = Now(),isOver = 1 where isnull(guestlist.checkoutTime) and guestlist.roomId=#{roomId}")
+    void updateRoomStatus(@Param("roomId") Integer roomId);
 }

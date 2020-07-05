@@ -34,9 +34,13 @@ public interface GuestMapper {
     })
     Guest selectGuestById(@Param("id") Integer id);
 
-    @Select("select guest.* from guest where exists(select guestlist.roomId from guestlist left join room on room.id = guestlist.roomId where guestlist.guestid=guest.id and room.hotelId = #{hotelId})")
+    @Select("select guest.* from guest where exists(select guestlist.roomId from guestlist left join room on room.id = guestlist.roomId where guestlist.guestid=guest.id and room.hotelId = #{hotelId} and isnull(guestlist.checkoutTime)) limit #{offset},#{rows}")
     @ResultMap(value = "GuestDetailDTOMap")
-    List<GuestDetailDTO> selectGuestByHotelId(@Param("hotelId") Integer hotelId);
+    List<GuestDetailDTO> selectGuestByHotelId(@Param("hotelId") Integer hotelId,@Param("offset") Integer offset,@Param("rows") Integer rows );
+
+
+    @Select("select count(*) from guest where exists(select guestlist.roomId from guestlist left join room on room.id = guestlist.roomId where guestlist.guestid=guest.id and room.hotelId = #{hotelId} and isnull(guestlist.checkoutTime))")
+    int selectCountGuestByHotelId(@Param("hotelId") Integer hotelId);
 
 
     @Select("select guest.* from guest where exists(select guestlist.roomId from guestlist left join room on room.id = guestlist.roomId where guestlist.guestid=guest.id)")
@@ -61,12 +65,12 @@ public interface GuestMapper {
     void InsertSelectivwWithoutIdAndIsVipAndVip(Guest guest);
 
     @Select("select * from guest where phone = #{phone}")
-    @ResultMap(value = "guestMap")
-    Guest selectByPhone(@Param("phone") String phone);
+    @ResultMap(value = "GuestDetailDTOMap")
+    List<GuestDetailDTO> selectByPhone(@Param("phone") String phone);
 
     @Select("select * from guest where socialId = #{socialId}")
-    @ResultMap(value = "guestMap")
-    Guest selectBySocialId(@Param("socialId") String socialId);
+    @ResultMap(value = "GuestDetailDTOMap")
+    List<GuestDetailDTO> selectBySocialId(@Param("socialId") String socialId);
 
     @Select("select if(count(*)=0,false,true) from guest where socialId = #{socialId}")
     boolean checkBySocialId(@Param("socialId") String socialId);
